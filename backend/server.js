@@ -12,9 +12,15 @@ connectDB();
 const app = express();
 app.use(express.json());
 
-// user creation route
+// user routes
 const userroutes = require('./routes/userroutes')
-app.use('/api/user',userroutes);
+app.use('/api/user', userroutes);
+app.use('/api/user', userroutes);
+app.use('/api/user', userroutes);
+
+// chat routes
+const chatroutes = require('./routes/chatroutes');
+app.use('/api/chat',chatroutes);
 
 
 // storing the port no from .env into PORT variable

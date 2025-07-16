@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-
 // async function to connect to mongodb
 const connectDB = async function () {
 
@@ -14,7 +13,6 @@ const connectDB = async function () {
         console.error('mongodb connection failed : ', error.message);
         process.exit(1);
     }
-
 }
 
 module.exports = connectDB;
