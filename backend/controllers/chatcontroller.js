@@ -2,8 +2,14 @@ const Chat = require('../models/chat');
 
 async function accesschat(req, res) {
 
+
+    req.user = { _id: '6874fc3de56f2dd9f6dff7e5' }; // Replace this with your actual user ID
+
+    // this is the target user id coming from frontend
     const { userId } = req.body;
 
+
+    // if no target userid is passed
     if (!userId) {
         return res.status(401).json({
             message: 'userId not provided'
@@ -12,29 +18,34 @@ async function accesschat(req, res) {
 
     try {
 
-        // checking if chat already exists
+        // checking if chat already exists by searching the database where both persons
+        //  userid is present and then it populates user data but excludes passwords
         let chat = await Chat.findOne({
             users: { $all: [req.user._id, userId] },
         }).populate('users', '-password');
 
+        // if chat exists send it to the frontend
         if (chat) {
             return res.json({ chat });
         }
 
-        // creating a new chat
+        // creating a new chat if not found 
         const newchat = await Chat.create({
             users: [req.user._id, userId],
         });
 
-        
+        // fetching the newly created chat with full user data of both users
         const fullchat = await Chat.findById(newchat._id).populate('users', '-password');
-        res.status(201).json({ fullchat });
-    } catch (error){
-        console.log(error);
+        res.status(201).json({
+            message: 'new chat created',
+            fullchat
+        }); 
+    } catch (error) {            // error handling when anything like db or something fails
+        console.log(error);      
         res.status(500).json({
-            message : 'something went wrong'
+            message: 'something went wrong'
         });
     }
 }
 
-module.exports = {accesschat};
+module.exports = { accesschat };
