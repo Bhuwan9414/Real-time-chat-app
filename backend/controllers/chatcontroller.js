@@ -2,14 +2,11 @@ const Chat = require('../models/chat');
 
 async function accesschat(req, res) {
 
-
-    req.user = { _id: '6874fc3de56f2dd9f6dff7e5' }; // Replace this with your actual user ID
-
     // this is the target user id coming from frontend
     const { userId } = req.body;
 
 
-    // if no target userid is passed
+    // if no target userid is passed give this error message
     if (!userId) {
         return res.status(401).json({
             message: 'userId not provided'
