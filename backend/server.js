@@ -15,8 +15,7 @@ app.use(express.json());
 // user routes
 const userroutes = require('./routes/userroutes')
 app.use('/api/user', userroutes);
-app.use('/api/user', userroutes);
-app.use('/api/user', userroutes);
+
 
 // chat routes
 const chatroutes = require('./routes/chatroutes');

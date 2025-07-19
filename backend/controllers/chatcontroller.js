@@ -36,13 +36,34 @@ async function accesschat(req, res) {
         res.status(201).json({
             message: 'new chat created',
             fullchat
-        }); 
+        });
     } catch (error) {            // error handling when anything like db or something fails
-        console.log(error);      
+        console.log(error);
         res.status(500).json({
             message: 'something went wrong'
         });
     }
 }
 
-module.exports = { accesschat };
+
+// function to fetch current logged in user chats from database
+
+async function fetchchat(req, res) {
+
+    try {
+
+        
+        const chats = await Chat
+            .find({ users: req.user._id })        // we are telling mongoose that give me all chats where the user array contains this user ID
+            .populate('users', '-password')    // populate the user details except password
+            .sort('-updateAt');                  // sort the chats according to most recently updated chat
+
+        res.status(200).json({ chats })
+    } catch (error) {
+        res.status(500).json({
+            message: 'something went wrong'
+        })
+    }
+}
+
+module.exports = { accesschat, fetchchat };
